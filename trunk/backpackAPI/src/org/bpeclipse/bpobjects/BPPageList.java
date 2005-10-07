@@ -1,10 +1,10 @@
-package org.bpeclipse.messages;
+package org.bpeclipse.bpobjects;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.bpeclipse.bpobjects.IBPObject;
 import org.jdom.Element;
 
 public class BPPageList implements IBPObject {
@@ -25,6 +25,10 @@ public class BPPageList implements IBPObject {
             pageIDList.add(id);
             
         }
+    }
+
+    public List getPageIDList() {
+        return Collections.unmodifiableList(pageIDList);
     }
 
 }

@@ -1,7 +1,7 @@
 package org.bpeclipse.messages;
 
 
-import org.bpeclipse.bpobjects.BPPage;
+import org.bpeclipse.bpobjects.BPPageList;
 import org.bpeclipse.bpobjects.IBPObject;
 import org.jdom.Element;
 
