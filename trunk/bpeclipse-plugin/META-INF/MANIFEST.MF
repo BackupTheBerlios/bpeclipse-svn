@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Backpack Eclipse Plug-in
+Bundle-SymbolicName: bpeclipse_plugin; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.bpeclipse.plugin.BPEclipsePlugin
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Eclipse-AutoStart: true
+Bundle-ClassPath: lib/log4j-1.2.8.jar
