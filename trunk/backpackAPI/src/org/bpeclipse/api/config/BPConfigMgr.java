@@ -17,12 +17,19 @@ public class BPConfigMgr {
         
         return instance;
     }
+    
+    private BPConfigMgr() {
+    }
 
     public String getToken() {
+        if (config == null) return null;
+        
         return config.getToken();
     }
     
     public String getUserName() {
+        if (config == null) return null;
+        
         return config.getUserName();
     }
     

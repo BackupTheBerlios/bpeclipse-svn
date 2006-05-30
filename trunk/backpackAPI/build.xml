@@ -7,10 +7,6 @@
 	<property name="lib.dir" location="lib" />
 	<property name="jar.file" value="backpackAPI.jar" />
 	
-	<property name="env.BPAPI_INSTALL_DIR" value="../bpeclipse-plugin/lib" />
-	<property name="install.dir" value="${env.BPAPI_INSTALL_DIR}" />
-	
-	
 	<path id="project.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar"/>
@@ -34,10 +30,6 @@
 			
 			<include name="**/*.class"/>
 		</jar>
-	</target>
-	
-	<target name="install" depends="makeJar">
-		<copy file="${jar.file}" todir="${install.dir}" />
 	</target>
 	
 	<target name="clean">

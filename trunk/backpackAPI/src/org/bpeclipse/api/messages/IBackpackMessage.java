@@ -1,5 +1,6 @@
 package org.bpeclipse.api.messages;
 
+import org.bpeclipse.api.BPException;
 import org.bpeclipse.api.bpobjects.IBPObject;
 
 
@@ -15,9 +16,9 @@ public interface IBackpackMessage {
     
     /**
      * Send the HTTP request
-     * @return Whether the request was successful
+     * @throws BPException 
      */
-    public boolean sendRequest();
+    public void sendRequest() throws BPException;
     
     /**
      * After receiving and handling the response, get the object encapsulated in the response 

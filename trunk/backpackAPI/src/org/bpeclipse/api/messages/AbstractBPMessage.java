@@ -1,5 +1,6 @@
 package org.bpeclipse.api.messages;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.httpclient.Header;
@@ -9,11 +10,13 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.log4j.Logger;
+import org.bpeclipse.api.BPException;
 import org.bpeclipse.api.bpobjects.IBPObject;
 import org.bpeclipse.api.config.BPConfigMgr;
 import org.bpeclipse.api.config.IBPConfig;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
@@ -26,13 +29,22 @@ public abstract class AbstractBPMessage implements IBackpackMessage {
     
     protected static Logger logger = Logger.getLogger(IBPConfig.BP_LOGGER);
 
-    public boolean sendRequest() {
+    public void sendRequest() throws BPException {
         
+        String tokenStr = BPConfigMgr.getInstance().getToken();
+        String userName = BPConfigMgr.getInstance().getUserName();
+        
+        if (tokenStr == null || userName == null || 
+                "".equals(tokenStr.trim()) || "".equals(userName.trim())) {
+            throw new BPException("User name and password cannot be null");
+        }
+
         Document req = new Document();
         
         Element root = new Element("request");
         Element token = new Element("token");
-        token.setText(BPConfigMgr.getInstance().getToken());
+
+        token.setText(tokenStr);
         
         root.addContent(token);
         
@@ -44,7 +56,7 @@ public abstract class AbstractBPMessage implements IBackpackMessage {
         
         HttpClient client = new HttpClient();
         
-        String requestURL = "http://" + BPConfigMgr.getInstance().getUserName() + ".backpackit.com/ws";
+        String requestURL = "http://" + userName + ".backpackit.com/ws";
         requestURL += getRequestURL();
             
         logger.debug("request to " + requestURL + ":\n " + reqXML);
@@ -56,54 +68,60 @@ public abstract class AbstractBPMessage implements IBackpackMessage {
         post.setRequestEntity(body);
         
         Document response = null;
+        
         try {
+            
             client.executeMethod(post);
             
             if (post.getStatusCode() != HttpStatus.SC_OK) {
-                logger.error("HTTP request failed with status " + post.getStatusCode() + ": " + post.getStatusText());
-                return false;
+                String errMsg = "HTTP request failed with status " + post.getStatusCode() + ": " + post.getStatusText();
+                logger.error(errMsg);
+                throw new BPException(errMsg);
             }
             
             InputStream is = post.getResponseBodyAsStream();
             response = new SAXBuilder().build(is);
             is.close();
-
-        } catch (Exception e) {
-            logger.error("Exception when getting or processing response: ", e);
-            return false;
+            
+        } catch (IOException e) {
+            throw new BPException("Failed to send request: ", e);
+        } catch (JDOMException e) {
+            throw new BPException("Failed to send request: ", e);
         } finally {
             post.releaseConnection();
         }
         
-        return parseResponse(response);
+        parseResponse(response);
     }
 
-    protected boolean parseResponse(Document response) {
+    protected void parseResponse(Document response) throws BPException {
         
         logger.debug("response:\n" + new XMLOutputter(Format.getPrettyFormat()).outputString(response));
         
         Element root = response.getRootElement();
         
         if (!root.getName().equals("response")) {
-            logger.error("Response document root is not <response>: " + root.getName());
-            return false;
+            String errMsg = "Response document root is not <response>: " + root.getName();
+            logger.error(errMsg);
+            throw new BPException(errMsg);
         }
         
         String successStr = root.getAttributeValue("success");
         boolean success = Boolean.valueOf(successStr).booleanValue();
         
         if (!success) {
-            logger.error("Request was not successful");
-            return false;
+            String errMsg = "Request was not successful";
+            logger.error(errMsg);
+            throw new BPException(errMsg);
         }
         
         // we expect only one child
         Element child = (Element)root.getChildren().get(0);
         
-        return parseObject(child);
+        parseObject(child);
     }
     
-    protected abstract boolean parseObject(Element root);
+    protected abstract void parseObject(Element root) throws BPException;
 
     protected abstract String getRequestURL();
 

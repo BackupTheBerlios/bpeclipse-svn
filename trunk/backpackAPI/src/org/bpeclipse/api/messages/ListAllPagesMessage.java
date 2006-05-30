@@ -1,6 +1,7 @@
 package org.bpeclipse.api.messages;
 
 
+import org.bpeclipse.api.BPException;
 import org.bpeclipse.api.bpobjects.BPPageList;
 import org.bpeclipse.api.bpobjects.IBPObject;
 import org.jdom.Element;
@@ -22,7 +23,7 @@ public class ListAllPagesMessage extends AbstractBPMessage {
         return pageList;
     }
 
-    protected boolean parseObject(Element root) {
+    protected void parseObject(Element root) throws BPException {
         if (!root.getName().equals("pages")) {
             logger.error("Wrong type of response for ListAllPagesMessage: " + root.getName());
         }
@@ -32,11 +33,11 @@ public class ListAllPagesMessage extends AbstractBPMessage {
         try {
             pageList.loadFromXml(root);
         } catch (Exception e) {
-            logger.error("Error parsing page list: ", e);
-            return false;
+            String errMsg = "Error parsing page list: ";
+            logger.error(errMsg, e);
+            throw new BPException(errMsg, e);        
         }
         
-        return true;
     }
 
 }

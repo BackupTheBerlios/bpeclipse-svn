@@ -3,6 +3,7 @@ package org.bpeclipse.api.messages;
 
 import java.util.Map;
 
+import org.bpeclipse.api.BPException;
 import org.bpeclipse.api.bpobjects.BPPage;
 import org.bpeclipse.api.bpobjects.IBPObject;
 import org.jdom.Element;
@@ -32,7 +33,7 @@ public class ShowPageMessage extends AbstractBPMessage {
         return page;
     }
 
-    protected boolean parseObject(Element root) {
+    protected void parseObject(Element root) throws BPException {
         
         if (!root.getName().equals("page")) {
             logger.error("Wrong type of response for ShowPageMessage: " + root.getName());
@@ -43,11 +44,11 @@ public class ShowPageMessage extends AbstractBPMessage {
         try {
             page.loadFromXml(root);
         } catch (Exception e) {
-            logger.error("Error parsing page: ", e);
-            return false;
+            String errMsg = "Error parsing page: ";
+            logger.error(errMsg, e);
+            throw new BPException(errMsg, e);
         }
         
-        return true;
     }
 
 }
