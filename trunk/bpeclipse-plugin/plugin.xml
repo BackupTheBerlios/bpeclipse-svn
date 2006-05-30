@@ -38,11 +38,17 @@
             id="org.bpeclipse.plugin.BPEclipsePlugin">
       </category>
       <view
+            allowMultiple="true"
             category="org.bpeclipse.plugin.BPEclipsePlugin"
-            class="org.bpeclipse.plugin.views.BPPagesView"
-            icon="icons/sample.gif"
-            id="org.bpeclipse.plugin.views.BPPagesView"
-            name="Backpack Pages"/>
+            class="org.bpeclipse.plugin.views.BPPageView"
+            id="org.bpeclipse.plugin.views.BPPageView"
+            name="Backpack Page"/>
+      <view
+            allowMultiple="false"
+            category="org.bpeclipse.plugin.BPEclipsePlugin"
+            class="org.bpeclipse.plugin.views.BPPageListView"
+            id="org.bpeclipse.plugin.views.BPPageListView"
+            name="Backpack Page List View"/>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -50,6 +56,14 @@
             class="org.bpeclipse.plugin.preferences.BPEclipsePreferences"
             id="org.bpeclipse.plugin.preferences.BPEclipsePreferences"
             name="Backpack Eclipse Preferences"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.bpeclipse.plugin.perspectives.BPEclipsePerspective"
+            fixed="false"
+            id="org.bpeclipse.plugin.perspectives.BPEclipsePerspective"
+            name="Backpack Eclipse Perspective"/>
    </extension>
 
 </plugin>

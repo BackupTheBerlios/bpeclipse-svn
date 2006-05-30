@@ -1,15 +1,11 @@
 package org.bpeclipse.plugin.views;
 
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.part.*;
-import org.eclipse.jface.viewers.*;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.jface.action.*;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.ui.*;
-import org.eclipse.swt.widgets.Menu;
+import org.bpeclipse.api.bpobjects.BPPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.part.ViewPart;
 
 
 /**
@@ -30,12 +26,15 @@ import org.eclipse.swt.SWT;
  * <p>
  */
 
-public class BPPagesView extends ViewPart {
+public class BPPageView extends ViewPart {
+    
+    public static final String VIEW_ID = "org.bpeclipse.plugin.views.BPPageView";
+    private Label label;
 
 	/**
 	 * The constructor.
 	 */
-	public BPPagesView() {
+	public BPPageView() {
 	}
 
 	/**
@@ -44,11 +43,21 @@ public class BPPagesView extends ViewPart {
 	 */
 	public void createPartControl(Composite parent) {
         
+        label = new Label(parent, SWT.LEFT);
+        label.setText("It's a page!");
         
 	}
 
     public void setFocus() {
         // TODO Auto-generated method stub
+        
+    }
+
+    public void setPage(BPPage selectedPage) {
+        
+        label.setText("I opened a page: " + selectedPage.getTitle());
+        setPartName(selectedPage.getTitle());
+        setContentDescription(selectedPage.getDescription());
         
     }
 

@@ -3,6 +3,7 @@
  */
 package org.bpeclipse.plugin.core;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -77,6 +78,10 @@ public class BPPageMgr {
     
     public BPPage getPageByID(String id) {
         return (BPPage)pages.get(id);
+    }
+    
+    public Collection getAllPages() {
+        return pages.values();
     }
 
 }
