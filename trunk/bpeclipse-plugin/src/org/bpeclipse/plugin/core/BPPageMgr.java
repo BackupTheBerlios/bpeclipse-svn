@@ -15,6 +15,7 @@ import org.bpeclipse.api.config.IBPConfig;
 import org.bpeclipse.api.messages.IBackpackMessage;
 import org.bpeclipse.api.messages.ListAllPagesMessage;
 import org.bpeclipse.api.messages.ShowPageMessage;
+import org.bpeclipse.plugin.BPPluginException;
 
 /**
  * @author achoi
@@ -30,19 +31,16 @@ public class BPPageMgr {
     
     public static BPPageMgr getInstance() {
         if (instance == null) {
-            
-            try {
-                instance = new BPPageMgr();
-            } catch (Exception e) {
-                logger.error("Failed to initialize BPPageMgr: ", e);
-            }
+            instance = new BPPageMgr();
         }
         
         return instance;
     }
     
-    protected BPPageMgr() throws Exception {
-        
+    protected BPPageMgr() {
+    }
+    
+    public void initialize() throws BPPluginException {
         pages = new HashMap();
         
         // request the listing of all pages, and store them
@@ -50,7 +48,7 @@ public class BPPageMgr {
         ListAllPagesMessage pageReq = new ListAllPagesMessage();
         
         if (!pageReq.sendRequest()) {
-            throw new Exception("Page request failed");
+            throw new BPPluginException("Page request failed");
         }
         
         BPPageList pageList = (BPPageList)pageReq.getResponseObject();
@@ -68,7 +66,7 @@ public class BPPageMgr {
             ShowPageMessage showPageMsg = new ShowPageMessage(param);
             
             if (!showPageMsg.sendRequest()) {
-                throw new Exception("Page request failed");
+                throw new BPPluginException("Page request failed");
             }
             
             pages.put(id, showPageMsg.getResponseObject());
