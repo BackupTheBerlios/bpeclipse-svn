@@ -1,4 +1,4 @@
-package org.bpeclipse.bpobjects;
+package org.bpeclipse.api.bpobjects;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

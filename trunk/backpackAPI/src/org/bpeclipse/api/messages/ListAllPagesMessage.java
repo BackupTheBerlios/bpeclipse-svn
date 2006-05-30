@@ -1,8 +1,8 @@
-package org.bpeclipse.messages;
+package org.bpeclipse.api.messages;
 
 
-import org.bpeclipse.bpobjects.BPPageList;
-import org.bpeclipse.bpobjects.IBPObject;
+import org.bpeclipse.api.bpobjects.BPPageList;
+import org.bpeclipse.api.bpobjects.IBPObject;
 import org.jdom.Element;
 
 public class ListAllPagesMessage extends AbstractBPMessage {

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.bpeclipse.core;
+package org.bpeclipse.plugin.core;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.bpeclipse.bpobjects.BPPage;
-import org.bpeclipse.bpobjects.BPPageList;
-import org.bpeclipse.config.IBPConfig;
-import org.bpeclipse.messages.IBackpackMessage;
-import org.bpeclipse.messages.ListAllPagesMessage;
-import org.bpeclipse.messages.ShowPageMessage;
+import org.bpeclipse.api.bpobjects.BPPage;
+import org.bpeclipse.api.bpobjects.BPPageList;
+import org.bpeclipse.api.config.IBPConfig;
+import org.bpeclipse.api.messages.IBackpackMessage;
+import org.bpeclipse.api.messages.ListAllPagesMessage;
+import org.bpeclipse.api.messages.ShowPageMessage;
 
 /**
  * @author achoi

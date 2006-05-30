@@ -1,10 +1,10 @@
-package org.bpeclipse.messages;
+package org.bpeclipse.api.messages;
 
 
 import java.util.Map;
 
-import org.bpeclipse.bpobjects.BPPage;
-import org.bpeclipse.bpobjects.IBPObject;
+import org.bpeclipse.api.bpobjects.BPPage;
+import org.bpeclipse.api.bpobjects.IBPObject;
 import org.jdom.Element;
 
 public class ShowPageMessage extends AbstractBPMessage {

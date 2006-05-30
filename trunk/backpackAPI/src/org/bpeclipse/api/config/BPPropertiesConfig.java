@@ -1,4 +1,4 @@
-package org.bpeclipse.config;
+package org.bpeclipse.api.config;
 
 import java.util.Properties;
 

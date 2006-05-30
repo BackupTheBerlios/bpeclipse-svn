@@ -1,4 +1,4 @@
-package org.bpeclipse.views;
+package org.bpeclipse.plugin.views;
 
 
 import org.eclipse.swt.widgets.Composite;

@@ -1,7 +1,7 @@
-package org.bpeclipse.bpobjects;
+package org.bpeclipse.api.bpobjects;
 
 import org.apache.log4j.Logger;
-import org.bpeclipse.config.IBPConfig;
+import org.bpeclipse.api.config.IBPConfig;
 import org.jdom.Element;
 
 public class BPPage implements IBPObject {

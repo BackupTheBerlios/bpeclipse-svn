@@ -1,6 +1,6 @@
 package org.bpeclipse.plugin;
 
-import org.bpeclipse.core.BPPageMgr;
+import org.bpeclipse.plugin.core.BPPageMgr;
 import org.eclipse.ui.plugin.*;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.osgi.framework.BundleContext;

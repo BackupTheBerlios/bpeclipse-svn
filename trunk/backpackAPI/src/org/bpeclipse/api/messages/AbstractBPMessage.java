@@ -1,4 +1,4 @@
-package org.bpeclipse.messages;
+package org.bpeclipse.api.messages;
 
 import java.io.InputStream;
 
@@ -9,9 +9,9 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.log4j.Logger;
-import org.bpeclipse.bpobjects.IBPObject;
-import org.bpeclipse.config.BPConfigMgr;
-import org.bpeclipse.config.IBPConfig;
+import org.bpeclipse.api.bpobjects.IBPObject;
+import org.bpeclipse.api.config.BPConfigMgr;
+import org.bpeclipse.api.config.IBPConfig;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;

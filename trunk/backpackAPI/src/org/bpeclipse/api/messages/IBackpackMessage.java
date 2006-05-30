@@ -1,6 +1,6 @@
-package org.bpeclipse.messages;
+package org.bpeclipse.api.messages;
 
-import org.bpeclipse.bpobjects.IBPObject;
+import org.bpeclipse.api.bpobjects.IBPObject;
 
 
 
