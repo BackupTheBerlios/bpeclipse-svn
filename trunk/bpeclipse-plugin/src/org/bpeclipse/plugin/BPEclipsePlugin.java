@@ -1,6 +1,8 @@
 package org.bpeclipse.plugin;
 
+import org.bpeclipse.api.config.BPConfigMgr;
 import org.bpeclipse.plugin.core.BPPageMgr;
+import org.bpeclipse.plugin.preferences.BPPluginConfig;
 import org.eclipse.ui.plugin.*;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -28,11 +30,17 @@ public class BPEclipsePlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
         
+        // initialize the configuration of the API library
+        BPConfigMgr.getInstance().setConfig(BPPluginConfig.getInstance());
+        
         // first, we initialize the pages in memory
         try {
             BPPageMgr.getInstance().initialize();
         } catch (BPPluginException e) {
-            BPEclipsePlugin.getDefault().getLog().log(new Status(IStatus.ERROR, "bpeclipse", IStatus.OK, "Could not initialize Page manager", e));
+            
+            // TODO: logging
+            BPEclipsePlugin.getDefault().getLog().log(
+                    new Status(IStatus.ERROR, "bpeclipse", IStatus.OK, "Could not initialize Page manager", e));
         }
         
 	}

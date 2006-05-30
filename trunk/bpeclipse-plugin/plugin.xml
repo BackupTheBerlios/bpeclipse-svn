@@ -35,21 +35,21 @@
          point="org.eclipse.ui.views">
       <category
             name="Backpack Eclipse"
-            id="bpeclipse_plugin">
+            id="org.bpeclipse.plugin.BPEclipsePlugin">
       </category>
       <view
-            name="Sample View"
+            category="org.bpeclipse.plugin.BPEclipsePlugin"
+            class="org.bpeclipse.plugin.views.BPPagesView"
             icon="icons/sample.gif"
-            category="bpeclipse_plugin"
-            class="org.bpeclipse.views.SampleView"
-            id="org.bpeclipse.views.SampleView">
-      </view>
-      <view
-            category="bpeclipse_plugin"
-            class="org.bpeclipse.views.BPPagesView"
-            icon="icons/sample.gif"
-            id="org.bpeclipse.views.BPPagesView"
+            id="org.bpeclipse.plugin.views.BPPagesView"
             name="Backpack Pages"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.bpeclipse.plugin.preferences.BPEclipsePreferences"
+            id="org.bpeclipse.plugin.preferences.BPEclipsePreferences"
+            name="Backpack Eclipse Preferences"/>
    </extension>
 
 </plugin>

@@ -1,0 +1,35 @@
+<project name="bpeclipse-plugin" basedir="." default="compile">
+	
+	<property environment="env" />
+
+	<property name="src.dir" location="src" />
+	<property name="bin.dir" location="bin" />
+	<property name="lib.dir" location="lib" />
+	
+	<path id="project.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<target name="getJar">
+		<subant buildpath="../backpackAPI" target="makeJar" />
+		<copy file="../backpackAPI/backpackAPI.jar" todir="${lib.dir}" />
+	</target>
+	
+	<target name="compile" depends="getJar">
+	
+		<mkdir dir="${bin.dir}" />
+		
+		<javac srcdir="${src.dir}"
+	         destdir="${bin.dir}"
+    	     classpathref="project.classpath"
+	         debug="on">
+		</javac>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${bin.dir}" />
+	</target>
+	
+</project>

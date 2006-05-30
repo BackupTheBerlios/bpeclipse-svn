@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.bpeclipse.api.BPException;
 import org.bpeclipse.api.bpobjects.BPPage;
 import org.bpeclipse.api.bpobjects.BPPageList;
 import org.bpeclipse.api.config.IBPConfig;
@@ -44,32 +45,33 @@ public class BPPageMgr {
         pages = new HashMap();
         
         // request the listing of all pages, and store them
-        
-        ListAllPagesMessage pageReq = new ListAllPagesMessage();
-        
-        if (!pageReq.sendRequest()) {
-            throw new BPPluginException("Page request failed");
-        }
-        
-        BPPageList pageList = (BPPageList)pageReq.getResponseObject();
-        
-        List ids = pageList.getPageIDList();
-        
-        // for each page, send a request for the page
-        for (Iterator it = ids.iterator(); it.hasNext(); ) {
-            String id = (String)it.next();
+        try {
+            ListAllPagesMessage pageReq = new ListAllPagesMessage();
             
-            logger.debug("Page ID: " + id);
+            pageReq.sendRequest();
             
-            Map param = new HashMap();
-            param.put(IBackpackMessage.PAGE_ID, id);
-            ShowPageMessage showPageMsg = new ShowPageMessage(param);
+            BPPageList pageList = (BPPageList)pageReq.getResponseObject();
             
-            if (!showPageMsg.sendRequest()) {
-                throw new BPPluginException("Page request failed");
+            List ids = pageList.getPageIDList();
+            
+            // for each page, send a request for the page
+            for (Iterator it = ids.iterator(); it.hasNext(); ) {
+                String id = (String)it.next();
+                
+                logger.debug("Page ID: " + id);
+                
+                Map param = new HashMap();
+                param.put(IBackpackMessage.PAGE_ID, id);
+                ShowPageMessage showPageMsg = new ShowPageMessage(param);
+                
+                showPageMsg.sendRequest();
+                
+                pages.put(id, showPageMsg.getResponseObject());
             }
             
-            pages.put(id, showPageMsg.getResponseObject());
+        } catch (BPException e) {
+            
+            throw new BPPluginException("Failed to initialize", e);
         }
     }
     
