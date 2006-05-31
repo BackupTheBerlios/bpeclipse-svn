@@ -26,7 +26,7 @@ public class BPPageListView extends ViewPart {
     private class BPPageListLabelProvider extends LabelProvider implements IBaseLabelProvider {
 
         public String getText(Object element) {
-            return ((BPPage)element).getTitle();
+            return BPPageMgr.getInstance().getPageTitle((String)element);
         }
 
     }
@@ -40,7 +40,7 @@ public class BPPageListView extends ViewPart {
         }
 
         public Object[] getElements(Object inputElement) {
-            return new ArrayList((Collection)inputElement).toArray(new BPPage[0]);
+            return new ArrayList((Collection)inputElement).toArray(new String[0]);
         }
 
     }
@@ -55,7 +55,7 @@ public class BPPageListView extends ViewPart {
         
         viewer.setContentProvider(new BPPageListContentProvider());
         viewer.setLabelProvider(new BPPageListLabelProvider());
-        viewer.setInput(BPPageMgr.getInstance().getAllPages());
+        viewer.setInput(BPPageMgr.getInstance().getPageIDs());
         viewer.addDoubleClickListener(new IDoubleClickListener() {
 
             public void doubleClick(DoubleClickEvent event) {
@@ -63,7 +63,8 @@ public class BPPageListView extends ViewPart {
                 IStructuredSelection selection 
                     = (IStructuredSelection) event.getSelection();
                 
-                BPPage selectedPage = (BPPage)selection.getFirstElement();
+                String selectedPageID = (String)selection.getFirstElement();
+                BPPage selectedPage = BPPageMgr.getInstance().getPageByID(selectedPageID);
                 
                 try {
                     
@@ -71,10 +72,9 @@ public class BPPageListView extends ViewPart {
                         PlatformUI.getWorkbench()
                         .getActiveWorkbenchWindow()
                         .getActivePage()
-                        .showView(BPPageView.VIEW_ID, selectedPage.getId(), IWorkbenchPage.VIEW_ACTIVATE);
+                        .showView(BPPageView.VIEW_ID, selectedPageID, IWorkbenchPage.VIEW_ACTIVATE);
                     
                     BPPageView pageView = (BPPageView)view;
-                    
                     pageView.setPage(selectedPage);
                     
                 } catch (PartInitException e) {

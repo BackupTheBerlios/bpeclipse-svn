@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import org.bpeclipse.api.BPException;
 import org.bpeclipse.api.bpobjects.BPPage;
 import org.bpeclipse.api.bpobjects.BPPageList;
-import org.bpeclipse.api.config.IBPConfig;
 import org.bpeclipse.api.messages.IBackpackMessage;
 import org.bpeclipse.api.messages.ListAllPagesMessage;
 import org.bpeclipse.api.messages.ShowPageMessage;
@@ -27,9 +26,10 @@ public class BPPageMgr {
     
     private static BPPageMgr instance;
     
-    private static Logger logger = Logger.getLogger(IBPConfig.BP_LOGGER);
+    private static Logger logger = Logger.getLogger(BPPageMgr.class);
     
-    private Map pages;
+    private Map pageMap;
+    private Map pageTitleMap;
     
     public static BPPageMgr getInstance() {
         if (instance == null) {
@@ -40,10 +40,11 @@ public class BPPageMgr {
     }
     
     protected BPPageMgr() {
+        pageMap = new HashMap();
+        pageTitleMap = new HashMap();
     }
     
     public void initialize() throws BPPluginException {
-        pages = new HashMap();
         
         // request the listing of all pages, and store them
         try {
@@ -53,22 +54,7 @@ public class BPPageMgr {
             
             BPPageList pageList = (BPPageList)pageReq.getResponseObject();
             
-            List ids = pageList.getPageIDList();
-            
-            // for each page, send a request for the page
-            for (Iterator it = ids.iterator(); it.hasNext(); ) {
-                String id = (String)it.next();
-                
-                logger.debug("Page ID: " + id);
-                
-                Map param = new HashMap();
-                param.put(IBackpackMessage.PAGE_ID, id);
-                ShowPageMessage showPageMsg = new ShowPageMessage(param);
-                
-                showPageMsg.sendRequest();
-                
-                pages.put(id, showPageMsg.getResponseObject());
-            }
+            this.pageTitleMap = pageList.getPageMap();
             
         } catch (BPException e) {
             
@@ -77,11 +63,35 @@ public class BPPageMgr {
     }
     
     public BPPage getPageByID(String id) {
-        return (BPPage)pages.get(id);
+        
+        if (!pageMap.containsKey(id)) {
+
+            logger.debug("Retrieving Page ID: " + id);
+            
+            Map param = new HashMap();
+            param.put(IBackpackMessage.PAGE_ID, id);
+            ShowPageMessage showPageMsg = new ShowPageMessage(param);
+            
+            try {
+                showPageMsg.sendRequest();
+            } catch (BPException e) {
+                logger.error("Could not retrieve page " + id, e);
+                return null;
+            }
+            
+            pageMap.put(id, showPageMsg.getResponseObject());
+            
+        }
+        
+        return (BPPage)pageMap.get(id);
     }
     
-    public Collection getAllPages() {
-        return pages.values();
+    public Collection getPageIDs() {
+        return this.pageTitleMap.keySet();
+    }
+
+    public String getPageTitle(String id) {
+        return (String)this.pageTitleMap.get(id);
     }
 
 }

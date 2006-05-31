@@ -3,6 +3,7 @@ package org.bpeclipse.plugin;
 import org.bpeclipse.api.config.BPConfigMgr;
 import org.bpeclipse.plugin.core.BPPageMgr;
 import org.bpeclipse.plugin.preferences.BPPluginConfig;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.*;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -70,4 +71,8 @@ public class BPEclipsePlugin extends AbstractUIPlugin {
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return AbstractUIPlugin.imageDescriptorFromPlugin("bpeclipse_plugin", path);
 	}
+    
+    public Display getDisplay() {
+        return getWorkbench().getDisplay();
+    }
 }

@@ -3,8 +3,8 @@ package org.bpeclipse.plugin.views;
 
 import org.bpeclipse.api.bpobjects.BPPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.ViewPart;
 
 
@@ -29,7 +29,10 @@ import org.eclipse.ui.part.ViewPart;
 public class BPPageView extends ViewPart {
     
     public static final String VIEW_ID = "org.bpeclipse.plugin.views.BPPageView";
-    private Label label;
+    
+    private BPPage page;
+
+    private BPPageComposite comp;
 
 	/**
 	 * The constructor.
@@ -43,8 +46,7 @@ public class BPPageView extends ViewPart {
 	 */
 	public void createPartControl(Composite parent) {
         
-        label = new Label(parent, SWT.LEFT);
-        label.setText("It's a page!");
+        comp = new BPPageComposite(parent, SWT.BORDER);
         
 	}
 
@@ -53,11 +55,11 @@ public class BPPageView extends ViewPart {
         
     }
 
-    public void setPage(BPPage selectedPage) {
+    public void setPage(BPPage page) {
         
-        label.setText("I opened a page: " + selectedPage.getTitle());
-        setPartName(selectedPage.getTitle());
-        setContentDescription(selectedPage.getDescription());
+        setPartName(page.getTitle());
+        this.page = page;
+        comp.setPage(page);
         
     }
 
