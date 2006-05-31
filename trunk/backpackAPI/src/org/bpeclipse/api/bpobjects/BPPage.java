@@ -29,13 +29,14 @@ public class BPPage implements IBPObject {
         
         this.description = node.getChild("description").getText();
         
+        this.listItems = new BPItemList();
+        this.notes = new BPNoteList();
+        
         if (node.getChild("items") != null) {
-            this.listItems = new BPItemList();
             this.listItems.loadFromXml(node.getChild("items"));
         }
         
         if (node.getChild("notes") != null) {
-            this.notes = new BPNoteList();
             this.notes.loadFromXml(node.getChild("notes"));
         }
         

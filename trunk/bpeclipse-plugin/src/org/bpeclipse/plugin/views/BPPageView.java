@@ -2,8 +2,10 @@ package org.bpeclipse.plugin.views;
 
 
 import org.bpeclipse.api.bpobjects.BPPage;
+import org.bpeclipse.plugin.BPEclipseColorUtils;
+import org.bpeclipse.plugin.core.BPPageMgr;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
@@ -45,22 +47,26 @@ public class BPPageView extends ViewPart {
 	 * to create the viewer and initialize it.
 	 */
 	public void createPartControl(Composite parent) {
+
+	    // the page ID is the secondary part of the view ID
+        if (page == null) {
+            String pageID = getViewSite().getSecondaryId();
+            page = BPPageMgr.getInstance().getPageByID(pageID);
+	    }
         
-        comp = new BPPageComposite(parent, SWT.BORDER);
+        comp = new BPPageComposite(parent, SWT.NONE, page);
         
+        ScrolledComposite sc = new ScrolledComposite(parent, SWT.V_SCROLL);
+        sc.setBackground(BPEclipseColorUtils.COLOR_WHITE);
+        sc.setContent(comp);
+        sc.setExpandHorizontal(true);
+        sc.setExpandVertical(true);
+        sc.setMinSize(comp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        
+        setPartName(page.getTitle());
 	}
 
     public void setFocus() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void setPage(BPPage page) {
-        
-        setPartName(page.getTitle());
-        this.page = page;
-        comp.setPage(page);
-        
     }
 
 }

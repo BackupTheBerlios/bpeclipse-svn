@@ -74,9 +74,6 @@ public class BPPageListView extends ViewPart {
                         .getActivePage()
                         .showView(BPPageView.VIEW_ID, selectedPageID, IWorkbenchPage.VIEW_ACTIVATE);
                     
-                    BPPageView pageView = (BPPageView)view;
-                    pageView.setPage(selectedPage);
-                    
                 } catch (PartInitException e) {
                     // TODO: logging
                     e.printStackTrace();
