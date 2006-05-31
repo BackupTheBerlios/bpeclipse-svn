@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import org.bpeclipse.api.BPException;
 import org.bpeclipse.api.bpobjects.IBPObject;
 import org.bpeclipse.api.config.BPConfigMgr;
-import org.bpeclipse.api.config.IBPConfig;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -27,7 +26,7 @@ import org.jdom.output.XMLOutputter;
  */
 public abstract class AbstractBPMessage implements IBackpackMessage {
     
-    protected static Logger logger = Logger.getLogger(IBPConfig.BP_LOGGER);
+    protected static Logger logger = Logger.getLogger(AbstractBPMessage.class);
 
     public void sendRequest() throws BPException {
         

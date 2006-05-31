@@ -1,19 +1,20 @@
 package org.bpeclipse.api.bpobjects;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.jdom.Element;
 
 public class BPPageList implements IBPObject {
     
-    private List pageIDList = new ArrayList();
+    private Map pageMap = new HashMap();
 
     public void loadFromXml(Element node) throws Exception {
         if (!node.getName().equals("pages")) {
-            throw new Exception("BPItemList element is not 'items'");
+            throw new Exception("BPPageList element is not 'pages'");
         }
         
         List pages = node.getChildren("page");
@@ -22,13 +23,14 @@ public class BPPageList implements IBPObject {
             Element pageElement = (Element)it.next();
             
             String id = pageElement.getAttribute("id").getValue();
-            pageIDList.add(id);
+            String title = pageElement.getAttribute("title").getValue();
+            pageMap.put(id, title);
             
         }
     }
 
-    public List getPageIDList() {
-        return Collections.unmodifiableList(pageIDList);
+    public Map getPageMap() {
+        return Collections.unmodifiableMap(pageMap);
     }
 
 }

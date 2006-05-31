@@ -1,12 +1,11 @@
 package org.bpeclipse.api.bpobjects;
 
 import org.apache.log4j.Logger;
-import org.bpeclipse.api.config.IBPConfig;
 import org.jdom.Element;
 
 public class BPPage implements IBPObject {
     
-    private static Logger logger = Logger.getLogger(IBPConfig.BP_LOGGER);
+    private static Logger logger = Logger.getLogger(BPPage.class);
     
     private String title;
     private String id;
