@@ -5,6 +5,8 @@ import java.util.Collection;
 
 import org.bpeclipse.api.bpobjects.BPPage;
 import org.bpeclipse.plugin.core.BPPageMgr;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -21,7 +23,10 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-public class BPPageListView extends ViewPart {
+public class BPPageListView 
+    extends ViewPart 
+    implements IEclipsePreferences.IPreferenceChangeListener 
+{
     
     private class BPPageListLabelProvider extends LabelProvider implements IBaseLabelProvider {
 
@@ -64,7 +69,6 @@ public class BPPageListView extends ViewPart {
                     = (IStructuredSelection) event.getSelection();
                 
                 String selectedPageID = (String)selection.getFirstElement();
-                BPPage selectedPage = BPPageMgr.getInstance().getPageByID(selectedPageID);
                 
                 try {
                     
@@ -85,6 +89,12 @@ public class BPPageListView extends ViewPart {
 
     public void setFocus() {
 
+    }
+
+    public void preferenceChange(PreferenceChangeEvent event) {
+        
+        event.toString();
+        
     }
 
 }

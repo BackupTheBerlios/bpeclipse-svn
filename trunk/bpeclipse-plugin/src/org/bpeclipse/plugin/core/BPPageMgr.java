@@ -67,6 +67,13 @@ public class BPPageMgr {
         if (!pageMap.containsKey(id)) {
 
             logger.debug("Retrieving Page ID: " + id);
+            logger.debug("....");
+            
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
             
             Map param = new HashMap();
             param.put(IBackpackMessage.PAGE_ID, id);

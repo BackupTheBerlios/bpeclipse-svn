@@ -3,10 +3,19 @@ package org.bpeclipse.plugin.views;
 
 import org.bpeclipse.api.bpobjects.BPPage;
 import org.bpeclipse.plugin.BPEclipseColorUtils;
+import org.bpeclipse.plugin.BPEclipsePlugin;
 import org.bpeclipse.plugin.core.BPPageMgr;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.ViewPart;
 
 
@@ -36,6 +45,8 @@ public class BPPageView extends ViewPart {
 
     private BPPageComposite comp;
 
+    private Label label;
+
 	/**
 	 * The constructor.
 	 */
@@ -50,11 +61,38 @@ public class BPPageView extends ViewPart {
 
 	    // the page ID is the secondary part of the view ID
         if (page == null) {
-            String pageID = getViewSite().getSecondaryId();
-            page = BPPageMgr.getInstance().getPageByID(pageID);
+            
+            final String pageID = getViewSite().getSecondaryId();
+            String pageName = BPPageMgr.getInstance().getPageTitle(pageID);
+
+            Job j = new Job("Loading page " + pageName) {
+
+                protected IStatus run(IProgressMonitor monitor) {
+                    page = BPPageMgr.getInstance().getPageByID(pageID);
+                    return Status.OK_STATUS;
+                }
+            };
+            
+            j.schedule();
+            
+            j.addJobChangeListener(new JobChangeAdapter() {
+
+                public void done(IJobChangeEvent event) {
+                    BPEclipsePlugin.getDefault().getDisplay().asyncExec(new Runnable() {
+                        public void run() {
+                            BPPageView.this.pageDone();
+                        }
+                    });
+                }
+                
+            });
+
+            label = new Label(parent, SWT.NONE);
+            label.setText("Please wait...");
+            
 	    }
         
-        comp = new BPPageComposite(parent, SWT.NONE, page);
+        comp = new BPPageComposite(parent, SWT.NONE);
         
         ScrolledComposite sc = new ScrolledComposite(parent, SWT.V_SCROLL);
         sc.setBackground(BPEclipseColorUtils.COLOR_WHITE);
@@ -63,8 +101,26 @@ public class BPPageView extends ViewPart {
         sc.setExpandVertical(true);
         sc.setMinSize(comp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         
-        setPartName(page.getTitle());
+        setPartName("Loading...");
+        
+        comp.setVisible(false);
 	}
+
+    private void pageDone() {
+        
+        if (page != null) {
+            label.dispose();
+            
+            setPartName(page.getTitle());
+            comp.setPage(page);
+            
+            comp.setVisible(true);
+            
+        } else {
+            // TODO: handle error
+        }
+        
+    }
 
     public void setFocus() {
     }

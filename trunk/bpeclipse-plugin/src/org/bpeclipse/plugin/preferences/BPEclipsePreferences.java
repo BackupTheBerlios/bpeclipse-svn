@@ -63,6 +63,8 @@ public class BPEclipsePreferences
         try {
             BPPageMgr.getInstance().initialize();
         } catch (BPPluginException e) {
+            // TODO: handle this
+            e.printStackTrace();
         }
         
         return rc;

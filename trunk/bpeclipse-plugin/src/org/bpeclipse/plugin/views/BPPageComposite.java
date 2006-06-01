@@ -26,10 +26,8 @@ public class BPPageComposite extends Composite {
     private Text bodyText;
     private Table todoList;
 
-    public BPPageComposite(Composite parent, int style, BPPage page) {
+    public BPPageComposite(Composite parent, int style) {
         super(parent, style);
-        
-        this.page = page;
         
         setBackground(BPEclipseColorUtils.COLOR_WHITE);
 
@@ -40,28 +38,12 @@ public class BPPageComposite extends Composite {
         createHeadingLabel("Body");
         
         bodyText = new Text(this, SWT.MULTI);
-        bodyText.setText(page.getDescription());
         
-        Point p = bodyText.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-        bodyText.setLayoutData(new GridData(p.x, p.y));
         
         createHeadingLabel("Lists");
         
         todoList = new Table(this, SWT.CHECK | SWT.SINGLE);
 
-        BPItemList items = page.getListItems();
-        for (Iterator it = items.getItemIDs().iterator(); it.hasNext(); ) {
-            String itemID = (String)it.next();
-            BPItem item = items.getItem(itemID);
-            
-            TableItem tableItem = new TableItem(todoList, SWT.NONE);
-            tableItem.setChecked(item.isCompleted());
-            tableItem.setText(item.getText());
-        }
-
-        p = todoList.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-        todoList.setLayoutData(new GridData(p.x, p.y));
-        
         CheckboxTableViewer todoListViewer = new CheckboxTableViewer(todoList);
         
     }
@@ -82,6 +64,29 @@ public class BPPageComposite extends Composite {
         Font newFont = new Font(BPEclipsePlugin.getDefault().getDisplay(), fd);
         label.setFont(newFont);
         label.setBackground(BPEclipseColorUtils.COLOR_WHITE);
+        
+    }
+
+    public void setPage(BPPage page) {
+        this.page = page;
+        
+        bodyText.setText(page.getDescription());
+        
+        Point p = bodyText.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+        bodyText.setLayoutData(new GridData(p.x, p.y));
+        
+        BPItemList items = page.getListItems();
+        for (Iterator it = items.getItemIDs().iterator(); it.hasNext(); ) {
+            String itemID = (String)it.next();
+            BPItem item = items.getItem(itemID);
+            
+            TableItem tableItem = new TableItem(todoList, SWT.NONE);
+            tableItem.setChecked(item.isCompleted());
+            tableItem.setText(item.getText());
+        }
+        
+        p = todoList.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+        todoList.setLayoutData(new GridData(p.x, p.y));
         
     }
 
