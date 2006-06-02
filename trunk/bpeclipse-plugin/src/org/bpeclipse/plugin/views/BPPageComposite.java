@@ -5,8 +5,8 @@ import java.util.Iterator;
 import org.bpeclipse.api.bpobjects.BPItem;
 import org.bpeclipse.api.bpobjects.BPItemList;
 import org.bpeclipse.api.bpobjects.BPPage;
-import org.bpeclipse.plugin.BPEclipsePlugin;
 import org.bpeclipse.plugin.BPEclipseColorUtils;
+import org.bpeclipse.plugin.BPEclipsePlugin;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
@@ -37,12 +37,11 @@ public class BPPageComposite extends Composite {
         
         createHeadingLabel("Body");
         
-        bodyText = new Text(this, SWT.MULTI);
-        
+        bodyText = new Text(this, SWT.MULTI | SWT.BORDER);
         
         createHeadingLabel("Lists");
         
-        todoList = new Table(this, SWT.CHECK | SWT.SINGLE);
+        todoList = new Table(this, SWT.CHECK | SWT.MULTI | SWT.BORDER);
 
         CheckboxTableViewer todoListViewer = new CheckboxTableViewer(todoList);
         
@@ -50,7 +49,7 @@ public class BPPageComposite extends Composite {
 
     private void createHeadingLabel(String labelText) {
         
-        Label label = new Label(this, SWT.SINGLE);
+        Label label = new Label(this, SWT.SINGLE | SWT.BORDER);
         label.setText(labelText);
         
         GridData gridData = new GridData();
@@ -74,6 +73,7 @@ public class BPPageComposite extends Composite {
         
         Point p = bodyText.computeSize(SWT.DEFAULT, SWT.DEFAULT);
         bodyText.setLayoutData(new GridData(p.x, p.y));
+        bodyText.pack(true);
         
         BPItemList items = page.getListItems();
         for (Iterator it = items.getItemIDs().iterator(); it.hasNext(); ) {
@@ -87,6 +87,7 @@ public class BPPageComposite extends Composite {
         
         p = todoList.computeSize(SWT.DEFAULT, SWT.DEFAULT);
         todoList.setLayoutData(new GridData(p.x, p.y));
+        todoList.pack(true);
         
     }
 

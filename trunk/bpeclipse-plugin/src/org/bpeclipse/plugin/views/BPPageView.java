@@ -13,8 +13,8 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.ViewPart;
 
@@ -45,7 +45,13 @@ public class BPPageView extends ViewPart {
 
     private BPPageComposite comp;
 
-    private Label label;
+    private Label waitLabel;
+
+    private StackLayout stackLayout;
+    
+    private Composite parent;
+
+    private ScrolledComposite sc;
 
 	/**
 	 * The constructor.
@@ -58,6 +64,11 @@ public class BPPageView extends ViewPart {
 	 * to create the viewer and initialize it.
 	 */
 	public void createPartControl(Composite parent) {
+        
+        this.parent = parent;
+        
+//        stackLayout = new StackLayout();
+//        parent.setLayout(stackLayout);
 
 	    // the page ID is the secondary part of the view ID
         if (page == null) {
@@ -78,7 +89,8 @@ public class BPPageView extends ViewPart {
             j.addJobChangeListener(new JobChangeAdapter() {
 
                 public void done(IJobChangeEvent event) {
-                    BPEclipsePlugin.getDefault().getDisplay().asyncExec(new Runnable() {
+                    BPEclipsePlugin.getDefault().getDisplay().asyncExec(
+                    new Runnable() {
                         public void run() {
                             BPPageView.this.pageDone();
                         }
@@ -87,34 +99,47 @@ public class BPPageView extends ViewPart {
                 
             });
 
-            label = new Label(parent, SWT.NONE);
-            label.setText("Please wait...");
+            waitLabel = new Label(parent, SWT.BORDER);
+            waitLabel.setText("Please wait...");
+            waitLabel.setBackground(BPEclipseColorUtils.COLOR_WHITE);
             
 	    }
         
-        comp = new BPPageComposite(parent, SWT.NONE);
+        comp = new BPPageComposite(parent, SWT.BORDER);
         
-        ScrolledComposite sc = new ScrolledComposite(parent, SWT.V_SCROLL);
+        sc = new ScrolledComposite(parent, SWT.V_SCROLL);
         sc.setBackground(BPEclipseColorUtils.COLOR_WHITE);
-        sc.setContent(comp);
         sc.setExpandHorizontal(true);
         sc.setExpandVertical(true);
-        sc.setMinSize(comp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        sc.setAlwaysShowScrollBars(true);
+        
+        sc.setVisible(false);
+        sc.moveBelow(null);
         
         setPartName("Loading...");
         
-        comp.setVisible(false);
+//        stackLayout.topControl = waitLabel;
+//        parent.layout();
+        
 	}
 
     private void pageDone() {
         
         if (page != null) {
-            label.dispose();
+            
+            waitLabel.setVisible(false);
+            waitLabel.moveBelow(null);
+            sc.setVisible(true);
             
             setPartName(page.getTitle());
             comp.setPage(page);
             
-            comp.setVisible(true);
+//            stackLayout.topControl = sc;
+//            parent.layout();
+
+            sc.setContent(comp);
+            sc.setMinSize(comp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+            comp.layout();
             
         } else {
             // TODO: handle error

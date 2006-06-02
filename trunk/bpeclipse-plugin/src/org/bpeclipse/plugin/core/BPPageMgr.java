@@ -40,11 +40,11 @@ public class BPPageMgr {
     }
     
     protected BPPageMgr() {
-        pageMap = new HashMap();
-        pageTitleMap = new HashMap();
     }
     
     public void initialize() throws BPPluginException {
+        pageMap = new HashMap();
+        pageTitleMap = new HashMap();
         
         // request the listing of all pages, and store them
         try {

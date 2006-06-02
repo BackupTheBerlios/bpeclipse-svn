@@ -3,10 +3,11 @@ package org.bpeclipse.plugin.views;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.bpeclipse.api.bpobjects.BPPage;
+import org.apache.log4j.Logger;
+import org.bpeclipse.plugin.BPPluginException;
 import org.bpeclipse.plugin.core.BPPageMgr;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -25,7 +26,6 @@ import org.eclipse.ui.part.ViewPart;
 
 public class BPPageListView 
     extends ViewPart 
-    implements IEclipsePreferences.IPreferenceChangeListener 
 {
     
     private class BPPageListLabelProvider extends LabelProvider implements IBaseLabelProvider {
@@ -51,6 +51,8 @@ public class BPPageListView
     }
 
     public static final String VIEW_ID = "org.bpeclipse.plugin.views.BPPageListView";
+    
+    private static Logger logger = Logger.getLogger(BPPageListView.class);
     
     private ListViewer viewer;
 
@@ -85,16 +87,27 @@ public class BPPageListView
                 
             }
         });
+
+        Action refreshAction = new Action() {
+            public void run() {
+                try {
+                    BPPageMgr.getInstance().initialize();
+                } catch (BPPluginException e) {
+                    // TODO: handle this
+                    logger.error("Failed to refresh", e);
+                }
+            }
+        };
+        
+        refreshAction.setText("Refresh");
+        
+        IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+        toolBarManager.add(refreshAction);
+        
     }
 
     public void setFocus() {
 
-    }
-
-    public void preferenceChange(PreferenceChangeEvent event) {
-        
-        event.toString();
-        
     }
 
 }
